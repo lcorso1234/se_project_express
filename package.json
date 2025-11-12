@@ -1,0 +1,32 @@
+{
+  "name": "0.01",
+  "version": "1.0.0",
+  "description": "The back-end project is focused on creating a server for the WTWR application. You’ll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization. ## Running the Project `npm run start` — to launch the server",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "lint": "npx eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcorso1234/se_project_express.git"
+  },
+  "author": "Law",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lcorso1234/se_project_express/issues"
+  },
+  "homepage": "https://github.com/lcorso1234/se_project_express#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.19.3",
+    "validator": "^13.15.20"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.10.2",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^2.8.8"
+  }
+}
