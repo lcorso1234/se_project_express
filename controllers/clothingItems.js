@@ -1,5 +1,5 @@
 const ClothingItem = require('../models/clothingItem');
-const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR } = require('../utils/errors');
+const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, FORBIDDEN } = require('../utils/errors');
 
 const SERVER_ERROR_MESSAGE = 'An error has occurred on the server.';
 
@@ -25,9 +25,12 @@ const handleControllerError = (err, res) => {
   return res.status(INTERNAL_SERVER_ERROR).send({ message: SERVER_ERROR_MESSAGE });
 };
 
-const buildError = (name, message) => {
+const buildError = (name, message, statusCode) => {
   const customError = new Error(message);
   customError.name = name;
+  if (statusCode) {
+    customError.statusCode = statusCode;
+  }
   return customError;
 };
 
@@ -69,10 +72,18 @@ const createClothingItem = async (req, res) => {
 const deleteClothingItem = async (req, res) => {
   try {
     const { itemId } = req.params;
-    const removedItem = await ClothingItem.findByIdAndDelete(itemId).orFail(() =>
+    const userId = req.user?._id;
+
+    const item = await ClothingItem.findById(itemId).orFail(() =>
       buildError('NotFoundError', 'Item not found')
     );
-    return res.send(removedItem);
+
+    if (item.owner.toString() !== userId) {
+      throw buildError('ForbiddenError', 'You do not have permission to delete this item', FORBIDDEN);
+    }
+
+    await item.deleteOne();
+    return res.send(item);
   } catch (err) {
     return handleControllerError(err, res);
   }
