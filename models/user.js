@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const { UNAUTHORIZED } = require('../utils/errors');
 
 const userSchema = new mongoose.Schema(
   {
@@ -46,7 +47,7 @@ const userSchema = new mongoose.Schema(
 userSchema.statics.findUserByCredentials = async function findUserByCredentials(email, password) {
   const User = this;
   const authError = new Error('Incorrect email or password');
-  authError.statusCode = 401;
+  authError.statusCode = UNAUTHORIZED;
 
   const user = await User.findOne({ email }).select('+password');
   if (!user) {

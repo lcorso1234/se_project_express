@@ -40,15 +40,6 @@ const buildError = (name, message) => {
   return customError;
 };
 
-const getUsers = async (req, res) => {
-  try {
-    const users = await User.find({});
-    return res.send(users);
-  } catch (err) {
-    return handleControllerError(err, res);
-  }
-};
-
 const getCurrentUser = async (req, res) => {
   try {
     const userId = req.user && req.user._id;
@@ -113,7 +104,7 @@ const login = async (req, res) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
     return res.send({ token });
   } catch (err) {
-    if (err.statusCode === 401) {
+    if (err.statusCode === UNAUTHORIZED) {
       return res.status(UNAUTHORIZED).send({ message: 'Incorrect email or password' });
     }
     return handleControllerError(err, res);
@@ -121,7 +112,6 @@ const login = async (req, res) => {
 };
 
 module.exports = {
-  getUsers,
   getCurrentUser,
   updateProfile,
   createUser,
