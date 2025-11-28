@@ -10,29 +10,7 @@ const {
 } = require('../utils/errors');
 const { JWT_SECRET } = require('../utils/config');
 
-const SERVER_ERROR_MESSAGE = 'An error has occurred on the server.';
-
-const handleControllerError = (err, res) => {
-  console.error(err);
-
-  if (err.statusCode) {
-    return res.status(err.statusCode).send({ message: err.message });
-  }
-
-  if (err.name === 'ValidationError') {
-    return res.status(BAD_REQUEST).send({ message: err.message });
-  }
-
-  if (err.name === 'NotFoundError' || err.name === 'DocumentNotFoundError') {
-    return res.status(NOT_FOUND).send({ message: err.message });
-  }
-
-  if (err.name === 'CastError') {
-    return res.status(BAD_REQUEST).send({ message: 'Invalid user ID' });
-  }
-
-  return res.status(INTERNAL_SERVER_ERROR).send({ message: SERVER_ERROR_MESSAGE });
-};
+const handleControllerError = require('../utils/handleControllerError');
 
 const buildError = (name, message) => {
   const customError = new Error(message);
@@ -48,7 +26,7 @@ const getCurrentUser = async (req, res) => {
     );
     return res.send(user);
   } catch (err) {
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'user ID');
   }
 };
 
@@ -65,7 +43,7 @@ const updateProfile = async (req, res) => {
 
     return res.send(updated);
   } catch (err) {
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'user ID');
   }
 };
 
@@ -89,7 +67,7 @@ const createUser = async (req, res) => {
     if (err && err.code === 11000) {
       return res.status(CONFLICT).send({ message: 'User with this email already exists' });
     }
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'user ID');
   }
 };
 
@@ -107,7 +85,7 @@ const login = async (req, res) => {
     if (err.statusCode === UNAUTHORIZED) {
       return res.status(UNAUTHORIZED).send({ message: 'Incorrect email or password' });
     }
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'user ID');
   }
 };
 

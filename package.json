@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "dev": "nodemon app.js",
     "lint": "npx eslint ."
   },
   "repository": {
@@ -30,6 +31,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.10.2",
     "eslint-plugin-import": "^2.32.0",
+    "nodemon": "^3.1.11",
     "prettier": "^3.6.2"
   }
 }

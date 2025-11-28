@@ -1,29 +1,7 @@
 const ClothingItem = require('../models/clothingItem');
 const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, FORBIDDEN } = require('../utils/errors');
 
-const SERVER_ERROR_MESSAGE = 'An error has occurred on the server.';
-
-const handleControllerError = (err, res) => {
-  console.error(err);
-
-  if (err.statusCode) {
-    return res.status(err.statusCode).send({ message: err.message });
-  }
-
-  if (err.name === 'ValidationError') {
-    return res.status(BAD_REQUEST).send({ message: err.message });
-  }
-
-  if (err.name === 'NotFoundError' || err.name === 'DocumentNotFoundError') {
-    return res.status(NOT_FOUND).send({ message: err.message });
-  }
-
-  if (err.name === 'CastError') {
-    return res.status(BAD_REQUEST).send({ message: 'Invalid item ID' });
-  }
-
-  return res.status(INTERNAL_SERVER_ERROR).send({ message: SERVER_ERROR_MESSAGE });
-};
+const handleControllerError = require('../utils/handleControllerError');
 
 const buildError = (name, message, statusCode) => {
   const customError = new Error(message);
@@ -39,7 +17,7 @@ const getClothingItems = async (req, res) => {
     const items = await ClothingItem.find({});
     return res.send(items);
   } catch (err) {
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'item ID');
   }
 };
 
@@ -65,7 +43,7 @@ const createClothingItem = async (req, res) => {
 
     return res.status(201).send(newItem);
   } catch (err) {
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'item ID');
   }
 };
 
@@ -85,7 +63,7 @@ const deleteClothingItem = async (req, res) => {
     await item.deleteOne();
     return res.send(item);
   } catch (err) {
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'item ID');
   }
 };
 
@@ -106,7 +84,7 @@ const likeClothingItem = async (req, res) => {
 
     return res.send(updatedItem);
   } catch (err) {
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'item ID');
   }
 };
 
@@ -127,7 +105,7 @@ const dislikeClothingItem = async (req, res) => {
 
     return res.send(updatedItem);
   } catch (err) {
-    return handleControllerError(err, res);
+    return handleControllerError(err, res, 'item ID');
   }
 };
 
