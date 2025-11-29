@@ -1,5 +1,5 @@
 const ClothingItem = require('../models/clothingItem');
-const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, FORBIDDEN } = require('../utils/errors');
+const { FORBIDDEN } = require('../utils/errors');
 
 const handleControllerError = require('../utils/handleControllerError');
 
@@ -57,7 +57,11 @@ const deleteClothingItem = async (req, res) => {
     );
 
     if (item.owner.toString() !== userId) {
-      throw buildError('ForbiddenError', 'You do not have permission to delete this item', FORBIDDEN);
+      throw buildError(
+        'ForbiddenError',
+        'You do not have permission to delete this item',
+        FORBIDDEN
+      );
     }
 
     await item.deleteOne();

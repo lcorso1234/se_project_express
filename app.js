@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 app.use(routes);
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  process.stdout.write(`Server listening on port ${PORT}\n`);
 });
 
 mongoose.connect('mongodb://127.0.0.1:27017/wtwr_db');

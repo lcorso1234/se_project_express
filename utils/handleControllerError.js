@@ -1,8 +1,4 @@
-const {
-  BAD_REQUEST,
-  NOT_FOUND,
-  INTERNAL_SERVER_ERROR,
-} = require('./errors');
+const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR } = require('./errors');
 
 const SERVER_ERROR_MESSAGE = 'An error has occurred on the server.';
 
