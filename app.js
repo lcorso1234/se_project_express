@@ -10,12 +10,18 @@ app.use(express.json());
 const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
-  'http://146.148.33.166:3000',
+
+  // Deployed IP
+  'http://146.148.33.166',
+
+  // Only keep this if you're actually running HTTPS on the IP
   'https://146.148.33.166',
-  'https://jungwebsites.com/',
-  'http://jungwebsites.com/',
-  'https://www.jungwebsites.com/',
-  'http://www.jungwebsites.com/',
+
+  // Domains
+  'https://jungwebsites.com',
+  'http://jungwebsites.com',
+  'https://www.jungwebsites.com',
+  'http://www.jungwebsites.com',
 ];
 
 app.use(
