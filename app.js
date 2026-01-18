@@ -7,36 +7,25 @@ const app = express();
 const PORT = 3001;
 
 app.use(express.json());
+
 const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
-
-  // Deployed IP
-  'http://146.148.33.166',
-
-  // Only keep this if you're actually running HTTPS on the IP
-  'https://146.148.33.166',
-
-  // Domains
   'https://jungwebsites.com',
-  'http://jungwebsites.com',
   'https://www.jungwebsites.com',
-  'http://www.jungwebsites.com',
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-  })
-);
-
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+};
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
