@@ -5,7 +5,9 @@ const routes = require('./routes');
 
 const app = express();
 const PORT = 3001;
-
+req.user = {
+  _id: '5d8b8592978f8bd833ca8133',
+};
 app.use(express.json());
 app.use(cors());
 
