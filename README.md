@@ -4,4 +4,7 @@ WTWR backend built with Express and MongoDB. Provides a REST API for managing us
 
 # Tutorial
 
-https://www.loom.com/share/93d6318f30b44e39a8f83860d0dfe5ef
+## Project Pitch Video
+
+Check out [this video](https://www.loom.com/share/f53e55bdbde94e08aef5d4f834e2becf), where I describe my
+project and some challenges I faced while building it.
