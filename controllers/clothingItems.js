@@ -1,8 +1,6 @@
 const ClothingItem = require('../models/clothingItem');
 const { FORBIDDEN } = require('../utils/errors');
 
-const handleControllerError = require('../utils/handleControllerError');
-
 const buildError = (name, message, statusCode) => {
   const customError = new Error(message);
   customError.name = name;
@@ -12,16 +10,16 @@ const buildError = (name, message, statusCode) => {
   return customError;
 };
 
-const getClothingItems = async (req, res) => {
+const getClothingItems = async (req, res, next) => {
   try {
     const items = await ClothingItem.find({});
     return res.send(items);
   } catch (err) {
-    return handleControllerError(err, res, 'item ID');
+    return next(err);
   }
 };
 
-const createClothingItem = async (req, res) => {
+const createClothingItem = async (req, res, next) => {
   try {
     const { name, weather, imageUrl } = req.body;
     const owner = req.user?._id;
@@ -43,11 +41,11 @@ const createClothingItem = async (req, res) => {
 
     return res.status(201).send(newItem);
   } catch (err) {
-    return handleControllerError(err, res, 'item ID');
+    return next(err);
   }
 };
 
-const deleteClothingItem = async (req, res) => {
+const deleteClothingItem = async (req, res, next) => {
   try {
     const { itemId } = req.params;
     const userId = req.user?._id;
@@ -67,11 +65,11 @@ const deleteClothingItem = async (req, res) => {
     await item.deleteOne();
     return res.send(item);
   } catch (err) {
-    return handleControllerError(err, res, 'item ID');
+    return next(err);
   }
 };
 
-const likeClothingItem = async (req, res) => {
+const likeClothingItem = async (req, res, next) => {
   try {
     const { itemId } = req.params;
     const userId = req.user?._id;
@@ -88,11 +86,11 @@ const likeClothingItem = async (req, res) => {
 
     return res.send(updatedItem);
   } catch (err) {
-    return handleControllerError(err, res, 'item ID');
+    return next(err);
   }
 };
 
-const dislikeClothingItem = async (req, res) => {
+const dislikeClothingItem = async (req, res, next) => {
   try {
     const { itemId } = req.params;
     const userId = req.user?._id;
@@ -109,7 +107,7 @@ const dislikeClothingItem = async (req, res) => {
 
     return res.send(updatedItem);
   } catch (err) {
-    return handleControllerError(err, res, 'item ID');
+    return next(err);
   }
 };
 
