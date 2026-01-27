@@ -13,7 +13,7 @@ project and some challenges I faced while building it.
 
 Add your deployed links here for quick access.
 
-- API: mongodb://127.0.0.1:27017/wtwr_db'
+- Backend API: https://api.jungwebsites.com/
 - Frontend: https://jungwebsites.com/
 
 If you have different environments, you can list them separately (development, staging, production).

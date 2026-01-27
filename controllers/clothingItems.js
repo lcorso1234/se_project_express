@@ -1,14 +1,5 @@
 const ClothingItem = require('../models/clothingItem');
-const { FORBIDDEN } = require('../utils/errors');
-
-const buildError = (name, message, statusCode) => {
-  const customError = new Error(message);
-  customError.name = name;
-  if (statusCode) {
-    customError.statusCode = statusCode;
-  }
-  return customError;
-};
+const { ForbiddenError, NotFoundError, InternalServerError } = require('../utils/customErrors');
 
 const getClothingItems = async (req, res, next) => {
   try {
@@ -24,12 +15,8 @@ const createClothingItem = async (req, res, next) => {
     const { name, weather, imageUrl } = req.body;
     const owner = req.user?._id;
 
-    if (!name || !weather || !imageUrl) {
-      throw buildError('ValidationError', 'name, weather, and imageUrl are required');
-    }
-
     if (!owner) {
-      throw buildError('ServerConfigurationError', 'Owner is not defined for request');
+      throw new InternalServerError('Owner is not defined for request');
     }
 
     const newItem = await ClothingItem.create({
@@ -50,16 +37,10 @@ const deleteClothingItem = async (req, res, next) => {
     const { itemId } = req.params;
     const userId = req.user?._id;
 
-    const item = await ClothingItem.findById(itemId).orFail(() =>
-      buildError('NotFoundError', 'Item not found')
-    );
+    const item = await ClothingItem.findById(itemId).orFail(() => new NotFoundError('Item not found'));
 
     if (item.owner.toString() !== userId) {
-      throw buildError(
-        'ForbiddenError',
-        'You do not have permission to delete this item',
-        FORBIDDEN
-      );
+      throw new ForbiddenError('You do not have permission to delete this item');
     }
 
     await item.deleteOne();
@@ -75,14 +56,14 @@ const likeClothingItem = async (req, res, next) => {
     const userId = req.user?._id;
 
     if (!userId) {
-      throw buildError('ServerConfigurationError', 'User ID is not defined');
+      throw new InternalServerError('User ID is not defined');
     }
 
     const updatedItem = await ClothingItem.findByIdAndUpdate(
       itemId,
       { $addToSet: { likes: userId } },
       { new: true }
-    ).orFail(() => buildError('NotFoundError', 'Item not found'));
+    ).orFail(() => new NotFoundError('Item not found'));
 
     return res.send(updatedItem);
   } catch (err) {
@@ -96,14 +77,14 @@ const dislikeClothingItem = async (req, res, next) => {
     const userId = req.user?._id;
 
     if (!userId) {
-      throw buildError('ServerConfigurationError', 'User ID is not defined');
+      throw new InternalServerError('User ID is not defined');
     }
 
     const updatedItem = await ClothingItem.findByIdAndUpdate(
       itemId,
       { $pull: { likes: userId } },
       { new: true }
-    ).orFail(() => buildError('NotFoundError', 'Item not found'));
+    ).orFail(() => new NotFoundError('Item not found'));
 
     return res.send(updatedItem);
   } catch (err) {
