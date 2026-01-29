@@ -8,14 +8,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 require('dotenv').config();
 
-mongoose
-  .connect('mongodb://127.0.0.1:27017/wtwr_db')
-  .then(() => {
-    console.log(' MongoDB connected successfully');
-  })
-  .catch((err) => {
-    console.error(' MongoDB connection error:', err.message);
-  });
+mongoose.connect('mongodb://127.0.0.1:27017/wtwr_db');
 
 const app = express();
 const { PORT = 3001 } = process.env;
