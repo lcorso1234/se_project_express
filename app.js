@@ -6,6 +6,8 @@ const routes = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
+require('dotenv').config();
+
 mongoose
   .connect('mongodb://127.0.0.1:27017/wtwr_db')
   .then(() => {
@@ -26,7 +28,7 @@ app.use(requestLogger);
 // Temporary user ID for testing purposes
 app.use((req, res, next) => {
   req.user = {
-    _id: "5d8b8592978f8bd833ca8133"
+    _id: '5d8b8592978f8bd833ca8133',
   };
   next();
 });

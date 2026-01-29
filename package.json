@@ -20,14 +20,15 @@
   "homepage": "https://github.com/lcorso1234/se_project_express#readme",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "celebrate": "^15.0.1",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "express-winston": "^4.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.3",
     "validator": "^13.15.20",
-    "winston": "^3.10.0",
-    "express-winston": "^4.2.0",
-    "celebrate": "^15.0.1"
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
